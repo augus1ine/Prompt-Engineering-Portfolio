@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>One-Month Intensive Training Schedule</title>
+<style>
+:root {
+  --bg:#0d0d0f; --bg2:#13131a; --bg3:#1a1a24; --bg4:#20202c;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --text:#f0ede8; --muted:#6a6878; --muted2:#9a98a8;
+  --accent:#f5c842; --accent-dim:rgba(245,200,66,0.12);
+  --green:#3dffc0; --green-dim:rgba(61,255,192,0.1);
+  --blue:#60b4f0; --blue-dim:rgba(96,180,240,0.1);
+  --red:#f06878; --red-dim:rgba(240,104,120,0.1);
+  --purple:#b08cff; --purple-dim:rgba(176,140,255,0.1);
+  --orange:#f0a060; --orange-dim:rgba(240,160,96,0.1);
+  --lime:#c8f060; --lime-dim:rgba(200,240,96,0.1);
+  --radius:14px; --radius-sm:8px; --radius-xs:6px;
+  --font:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mono:'SF Mono','Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100%}
+body{padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+
+/* ── PAGE ── */
+.page{max-width:1100px;margin:0 auto;padding:2rem 1.2rem 5rem}
+.header-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);font-family:var(--mono);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem}
+.header-label::before{content:'';display:block;width:28px;height:1px;background:var(--green)}
+h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:900;letter-spacing:-0.04em;line-height:1;margin-bottom:0.5rem}
+h1 span{color:var(--accent)}
+.tagline{font-family:var(--mono);font-size:0.75rem;color:var(--muted2);margin-bottom:2rem}
+
+/* ── DAY FILTERS ── */
+.day-filters{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.8rem}
+.day-btn{padding:0.4rem 1.1rem;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-size:0.8rem;font-family:var(--font);cursor:pointer;transition:all 0.15s;-webkit-appearance:none}
+.day-btn:active{transform:scale(0.96)}
+.day-btn.active{background:var(--green);border-color:var(--green);color:#0d0d0f;font-weight:700}
+
+/* ── GRID ── */
+.sched-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sched-grid{display:grid;grid-template-columns:90px repeat(5,1fr);gap:6px;min-width:600px}
+
+/* column headers */
+.col-header{padding:0.7rem 0.5rem;text-align:center;font-size:0.65rem;letter-spacing:0.1em;font-family:var(--mono);color:var(--muted2);background:var(--bg2);border-radius:var(--radius-xs);border:1px solid var(--border);font-weight:700}
+.col-header.empty{background:transparent;border:none}
+
+/* row label */
+.row-label{display:flex;flex-direction:column;justify-content:flex-start;padding:0.6rem 0.3rem;gap:0.2rem}
+.row-label .block-name{font-size:0.7rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text)}
+.row-label .block-time{font-family:var(--mono);font-size:0.6rem;color:var(--muted)}
+
+/* cell */
+.cell{border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg2);padding:0.6rem;min-height:100px;display:flex;flex-direction:column;gap:4px;transition:border-color 0.15s}
+.cell:hover{border-color:var(--border2)}
+.cell.hidden-day{display:none}
+
+.act-count{font-size:0.6rem;letter-spacing:0.08em;font-family:var(--mono);margin-bottom:2px;font-weight:700}
+.act-pill{font-size:0.68rem;padding:0.25rem 0.5rem;border-radius:var(--radius-xs);color:var(--text);cursor:pointer;transition:all 0.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid transparent}
+.act-pill:active{transform:scale(0.97)}
+.act-pill.wellness{background:rgba(61,255,192,0.08);border-color:rgba(61,255,192,0.15);color:var(--green)}
+.act-pill.study{background:rgba(96,180,240,0.08);border-color:rgba(96,180,240,0.15);color:var(--blue)}
+.act-pill.fitness{background:rgba(240,104,120,0.08);border-color:rgba(240,104,120,0.2);color:var(--red)}
+.act-pill.coding{background:rgba(176,140,255,0.08);border-color:rgba(176,140,255,0.15);color:var(--purple)}
+.act-pill.school{background:rgba(245,200,66,0.08);border-color:rgba(245,200,66,0.15);color:var(--accent)}
+.act-pill.fitness:hover{background:rgba(240,104,120,0.18);border-color:rgba(240,104,120,0.35)}
+.more-label{font-size:0.6rem;color:var(--muted);font-family:var(--mono);padding-top:1px}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+@media(min-width:600px){.modal-overlay{align-items:center}}
+.modal{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.4rem;padding-bottom:calc(1.4rem + env(safe-area-inset-bottom,0))}
+@media(min-width:600px){.modal{border-radius:var(--radius);max-height:85vh}}
+.modal-handle{width:36px;height:3px;background:var(--border2);border-radius:2px;margin:0 auto 1.2rem}
+.modal-close{position:absolute;top:1rem;right:1rem;background:var(--bg4);border:1px solid var(--border);color:var(--muted2);font-size:1rem;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);-webkit-appearance:none}
+.modal-inner{position:relative}
+.modal-cat-label{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--mono);margin-bottom:0.3rem}
+.modal-title{font-size:1.2rem;font-weight:700;margin-bottom:0.25rem;line-height:1.2}
+.modal-meta{font-size:0.75rem;color:var(--muted2);font-family:var(--mono);margin-bottom:1.2rem}
+.modal-desc{font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:1.2rem}
+
+/* ── WORKOUT TIMER (inside modal) ── */
+.workout-section{border-top:1px solid var(--border);padding-top:1.2rem;margin-top:0.4rem}
+.wk-label{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--mono);color:var(--muted);margin-bottom:0.8rem}
+.ex-list-modal{display:flex;flex-direction:column;gap:4px;margin-bottom:1rem}
+.ex-item-m{display:flex;align-items:center;gap:0.7rem;padding:0.55rem 0.8rem;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--bg4);cursor:pointer;transition:all 0.15s}
+.ex-item-m:active{transform:scale(0.98)}
+.ex-item-m.active-ex{border-color:var(--lime);background:rgba(200,240,96,0.06)}
+.ex-dot-m{width:7px;height:7px;border-radius:50%;background:var(--border2);flex-shrink:0;transition:background 0.2s}
+.ex-item-m.active-ex .ex-dot-m{background:var(--lime)}
+.ex-info-m{flex:1}
+.ex-name-m{font-size:0.82rem;color:var(--text)}
+.ex-detail-m{font-size:0.67rem;color:var(--muted);margin-top:0.1rem;font-family:var(--mono)}
+.ex-sets-m{font-size:0.62rem;color:var(--muted);font-family:var(--mono);padding:0.15rem 0.45rem;border-radius:100px;background:var(--bg3);border:1px solid var(--border)}
+
+/* ── TIMER PANEL ── */
+.timer-panel{padding:1rem;background:var(--bg4);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:0.5rem}
+.tp-exname{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);font-family:var(--mono);margin-bottom:0.2rem}
+.tp-extitle{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:1rem}
+.tp-phase{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;font-family:var(--mono);margin-bottom:0.5rem;font-weight:700}
+.phase-work{color:var(--lime)}
+.phase-rest-set{color:var(--blue)}
+.phase-rest-ex{color:var(--orange)}
+
+.ring-wrap{display:flex;justify-content:center;margin-bottom:1rem}
+.ring-svg{width:120px;height:120px}
+.ring-track{fill:none;stroke:rgba(255,255,255,0.07);stroke-width:7}
+.ring-prog{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 0.5s linear,stroke 0.4s;transform-origin:center;transform:rotate(-90deg)}
+.ring-time{font-size:1.7rem;font-weight:700;dominant-baseline:middle;text-anchor:middle;fill:var(--text);font-family:var(--font)}
+.ring-sub{font-size:0.62rem;dominant-baseline:middle;text-anchor:middle;fill:#6a6878;font-family:var(--mono)}
+
+.set-dots{display:flex;justify-content:center;gap:7px;margin-bottom:0.9rem}
+.set-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.1);transition:background 0.2s}
+.set-dot.done{background:var(--lime)}
+.set-dot.current{background:var(--lime);opacity:0.5}
+
+.prog-row{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.9rem}
+.prog-bar-wrap{flex:1;height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:2px;transition:width 0.5s linear}
+
+.timer-controls{display:flex;gap:0.6rem}
+.btn{flex:1;padding:0.65rem;border-radius:var(--radius-xs);border:none;font-size:0.82rem;font-weight:600;cursor:pointer;transition:opacity 0.15s,transform 0.1s;font-family:var(--font);-webkit-appearance:none}
+.btn:active{transform:scale(0.96);opacity:0.85}
+.btn-start{background:var(--lime);color:#0d0d0f}
+.btn-pause{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}
+.btn-skip{background:var(--bg3);color:var(--muted2);border:1px solid var(--border);flex:0 0 auto;padding:0.65rem 0.85rem;font-size:0.75rem}
+.btn-reset{background:var(--bg3);color:var(--muted);border:1px solid var(--border);flex:0 0 auto;padding:0.65rem 0.85rem;font-size:0.75rem}
+
+.done-banner{text-align:center;padding:0.8rem 0}
+.done-icon{font-size:1.8rem;margin-bottom:0.4rem}
+.done-title{font-size:0.95rem;font-weight:700;color:var(--lime);margin-bottom:0.2rem}
+.done-sub{font-size:0.75rem;color:var(--muted)}
+
+/* ── LEGEND ── */
+.legend{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+.legend-item{display:flex;align-items:center;gap:0.4rem;font-size:0.72rem;color:var(--muted2)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+@media(max-width:640px){
+  .page{padding:1rem 0.7rem 5rem}
+  h1{font-size:2rem}
+  .sched-grid{grid-template-columns:72px repeat(5,1fr);gap:4px;min-width:520px}
+  .cell{min-height:80px;padding:0.45rem}
+  .act-pill{font-size:0.62rem;padding:0.2rem 0.4rem}
+  .col-header{font-size:0.58rem;padding:0.5rem 0.3rem}
+  .row-label .block-name{font-size:0.62rem}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header-label">Intensive Training</div>
+  <h1>One-Month <span>Schedule</span></h1>
+  <p class="tagline">Weekdays &middot; 4 Time Blocks &middot; Tap any activity to expand</p>
+
+  <div class="day-filters" id="dayFilters"></div>
+  <div class="sched-wrap">
+    <div class="sched-grid" id="schedGrid"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Wellness</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Study / Reading</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Fitness</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Coding</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>School</div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-inner">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const DAYS = ['MON','TUE','WED','THU','FRI'];
+const DAY_FULL = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+
+const BLOCKS = [
+  { id:'em', name:'Early Morning', time:'6:30 – 10:00' },
+  { id:'md', name:'Midday',        time:'11:00 – 3:00' },
+  { id:'af', name:'Afternoon',     time:'4:00 – 7:00'  },
+  { id:'ev', name:'Evening',       time:'8:00 – 10:00' },
+];
+
+// cat: wellness | study | fitness | coding | school
+// fitnessKey links to ROUTINES below
+const SCHEDULE = {
+  MON: {
+    em: [
+      { title:'Meditation + Dynamic Stretches', cat:'wellness', desc:'10–15 min mindfulness, then full dynamic warm-up: deep lunges, 90-90, gate openers, world\'s greatest stretch, hip circles.' },
+      { title:'Fusion ACA Reading & Practice', cat:'study', desc:'Core reading for Fusion ACA exam prep — theory, shortcuts, and practice questions.' },
+      { title:'ANSYS Stress Analysis Fundamentals', cat:'study', desc:'Foundations of FEA stress analysis in ANSYS Mechanical.' },
+    ],
+    md: [
+      { title:'School Training (if available)', cat:'school', desc:'Attend any scheduled school sessions or lab time.' },
+      { title:'ANSYS Stress Analysis Fundamentals', cat:'study', desc:'Continue FEA fundamentals — boundary conditions, meshing, result interpretation.' },
+      { title:'Personal Project Time', cat:'coding', desc:'Work on personal engineering or software projects.' },
+    ],
+    af: [
+      { title:'Plyometric Routine', cat:'fitness', fitnessKey:'plyo', desc:'Full plyometric session: runner\'s lunges, box jumps, jump squats, cossack squats, single-leg drills.' },
+      { title:'Coding Practice (Algorithms)', cat:'coding', desc:'LeetCode / algorithm challenges — arrays, sorting, recursion.' },
+    ],
+    ev: [
+      { title:'AI Coding Practice', cat:'coding', desc:'Build and experiment with AI/ML scripts, models, or APIs.' },
+      { title:'Fusion ACA Mock Exam Drills', cat:'study', desc:'Timed mock exam questions to simulate real test conditions.' },
+    ],
+  },
+  TUE: {
+    em: [
+      { title:'Meditation + Dynamic Stretches', cat:'wellness', desc:'Morning mindfulness and dynamic warm-up routine.' },
+      { title:'Robotics & Automation Reading', cat:'study', desc:'Study robotics principles, kinematics, and automation systems.' },
+      { title:'Fusion ACA Practice Questions', cat:'study', desc:'Targeted practice on weak areas identified from Monday drills.' },
+    ],
+    md: [
+      { title:'School Training (if available)', cat:'school', desc:'Attend any scheduled school sessions or lab time.' },
+      { title:'Electronics Lab Reading', cat:'study', desc:'Textbook reading on circuits, microprocessors, sensors, and interfaces.' },
+    ],
+    af: [
+      { title:'Isometric Holds Routine', cat:'fitness', fitnessKey:'iso', desc:'57-min isometric session: planks, wall handstands, horse stance, wall sit, dead hangs, L-sits.' },
+      { title:'ANSYS Stress Analysis Problems', cat:'study', desc:'Worked examples and problem sets from ANSYS stress analysis curriculum.' },
+    ],
+    ev: [
+      { title:'Simulation Reading (CFD)', cat:'study', desc:'Study CFD theory — Navier-Stokes, turbulence models, boundary conditions.' },
+      { title:'Coding Practice (Python)', cat:'coding', desc:'Python scripting practice — data structures, automation, scripting.' },
+    ],
+  },
+  WED: {
+    em: [
+      { title:'Meditation + Dynamic Stretches', cat:'wellness', desc:'Morning mindfulness and dynamic warm-up routine.' },
+      { title:'Fusion ACA Practice Questions', cat:'study', desc:'Mid-week ACA practice session focusing on simulation and assembly.' },
+      { title:'Robotics Project Work', cat:'study', desc:'Hands-on robotics project work or programming.' },
+    ],
+    md: [
+      { title:'School Training (if available)', cat:'school', desc:'Attend any scheduled school sessions or lab time.' },
+      { title:'Robotics Project Work', cat:'study', desc:'Continue robotics project — wiring, coding, testing.' },
+    ],
+    af: [
+      { title:'Kick Day Routine', cat:'fitness', fitnessKey:'kicks', desc:'60–75 min kicks training session. Warm up thoroughly. Focus on technique, range, and power.' },
+      { title:'Electronics & Microprocessors Study', cat:'study', desc:'Deep study of microcontroller programming (Arduino/ESP32), interfacing, and embedded systems.' },
+    ],
+    ev: [
+      { title:'Coding Practice (General)', cat:'coding', desc:'Mixed coding practice — data structures, OOP, or project work.' },
+      { title:'Simulation Reading', cat:'study', desc:'CFD simulation reading and review of previous ANSYS session.' },
+    ],
+  },
+  THU: {
+    em: [
+      { title:'Meditation + Dynamic Stretches', cat:'wellness', desc:'Morning mindfulness and dynamic warm-up routine.' },
+      { title:'Simulation Reading (CFD)', cat:'study', desc:'CFD theory: mesh generation, solver settings, post-processing.' },
+      { title:'Electronics & Microprocessors Study', cat:'study', desc:'Advanced electronics: PWM, ADC, communication protocols (I2C, SPI, UART).' },
+    ],
+    md: [
+      { title:'School Training (if available)', cat:'school', desc:'Attend any scheduled school sessions or lab time.' },
+      { title:'ANSYS CFD Practice', cat:'study', desc:'Hands-on CFD simulation practice in ANSYS Fluent — pipe flow, heat transfer cases.' },
+    ],
+    af: [
+      { title:'Upper Body Strength Routine', cat:'fitness', fitnessKey:'upper', desc:'Pull-ups, push-up variations, wall handstand push-ups, crab walk. 2×10yd sprint rest between sets.' },
+      { title:'Coding Practice (AI/ML Basics)', cat:'coding', desc:'Study and implement basic ML algorithms — linear regression, classification, neural nets.' },
+    ],
+    ev: [
+      { title:'Robotics & Automation Review', cat:'study', desc:'Review week\'s robotics content, consolidate notes.' },
+      { title:'Electronics Problem-Solving', cat:'study', desc:'Circuit problem sets and debugging practice.' },
+    ],
+  },
+  FRI: {
+    em: [
+      { title:'Meditation + Dynamic Stretches', cat:'wellness', desc:'Morning mindfulness and dynamic warm-up routine.' },
+      { title:'Electronics & Microprocessors Study', cat:'study', desc:'Electronics deep-dive — focus on project integration and weekend prep.' },
+      { title:'Fusion ACA Review', cat:'study', desc:'End-of-week ACA review: consolidate the week\'s learning.' },
+    ],
+    md: [
+      { title:'School Training (if available)', cat:'school', desc:'Attend any scheduled school sessions or lab time.' },
+      { title:'ANSYS CFD Advanced Topics', cat:'study', desc:'Advanced CFD: turbulence modelling, transient simulations, convergence strategies.' },
+    ],
+    af: [
+      { title:'Agility Work Routine', cat:'fitness', fitnessKey:'agility', desc:'40 min agility: 4×5min ladder sets with 5 min rest, then 3–5 reps of agility drills.' },
+      { title:'Coding Practice (Algorithms)', cat:'coding', desc:'Algorithm practice and weekly review of coding problems.' },
+    ],
+    ev: [
+      { title:'Fusion ACA Review', cat:'study', desc:'Weekly Fusion 360 ACA consolidation and weak-area drilling.' },
+      { title:'AI Coding Practice', cat:'coding', desc:'End-of-week AI/ML coding session — implement or extend current project.' },
+    ],
+  },
+};
+
+// ══════════════════════════════════════════════════════
+// WORKOUT ROUTINES
+// ══════════════════════════════════════════════════════
+const ROUTINES = {
+  iso: {
+    title:'Isometric Holds', duration:'57 min', setRestSec:60, exRestSec:180,
+    exercises:[
+      {name:'Planks',sets:3,workSec:60},
+      {name:'Wall Handstands',sets:3,workSec:45},
+      {name:'Horse Stance',sets:3,workSec:60},
+      {name:'Wall Sit',sets:3,workSec:60},
+      {name:'Inclined Wall Sit',sets:3,workSec:45},
+      {name:'Dead Hangs',sets:3,workSec:45},
+      {name:'L-Sit Holds',sets:3,workSec:45},
+    ]
+  },
+  plyo: {
+    title:'Plyometric Exercises', duration:'63 min', setRestSec:60, exRestSec:180,
+    exercises:[
+      {name:"Runner's Lunges",sets:3,workSec:60},
+      {name:'Box Jumps',sets:3,workSec:60},
+      {name:'Jump Squats to Calf-Raisers',sets:3,workSec:60},
+      {name:'Cossack Squats',sets:3,workSec:60},
+      {name:'Side Leg Raisers',sets:3,workSec:60},
+      {name:'Single Leg Lateral Bounds to High Knee Jump',sets:3,workSec:60},
+      {name:'Single Leg Lunge Bounce',sets:3,workSec:60},
+    ]
+  },
+  upper: {
+    title:'Upper Body Strength', duration:'~50 min', setRestSec:30, exRestSec:180,
+    exercises:[
+      {name:'Pull-ups',sets:3,workSec:null,reps:6},
+      {name:'Military to Wide-Arm Push-ups',sets:3,workSec:null,reps:7},
+      {name:'Inclined Diamond Push-ups',sets:3,workSec:null,reps:7},
+      {name:'Wall Handstand Push-ups',sets:3,workSec:null,reps:4},
+      {name:'Explosive Push-ups (Claps)',sets:3,workSec:null,reps:8},
+      {name:'Lateral Explosive Push-ups',sets:3,workSec:null,reps:6},
+      {name:'Deep 6 Push-ups',sets:3,workSec:null,reps:6},
+      {name:'Downward Dog Push-ups',sets:3,workSec:null,reps:8},
+      {name:'Crab Walk',sets:3,workSec:45},
+    ]
+  },
+  agility: {
+    title:'Agility Work', duration:'40 min', setRestSec:60, exRestSec:300,
+    exercises:[
+      {name:'Ladder Drill — Set 1',sets:1,workSec:300},
+      {name:'Ladder Drill — Set 2',sets:1,workSec:300},
+      {name:'Ladder Drill — Set 3',sets:1,workSec:300},
+      {name:'Ladder Drill — Set 4',sets:1,workSec:300},
+      {name:'Agility Drill Reps',sets:5,workSec:60},
+    ]
+  },
+  kicks: {
+    title:'Kicks Routine', duration:'60–75 min', setRestSec:60, exRestSec:120,
+    exercises:[
+      {name:'Front Kick Warm-up',sets:3,workSec:60},
+      {name:'Roundhouse Kicks',sets:3,workSec:60},
+      {name:'Side Kicks',sets:3,workSec:60},
+      {name:'Back Kicks',sets:3,workSec:60},
+      {name:'Spinning Hook Kick',sets:3,workSec:45},
+      {name:'Jump Kicks',sets:3,workSec:45},
+    ]
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let activeDay = 'all';
+let activeTimer = null;
+let currentModal = null; // {routineKey, exIdx}
+
+// ══════════════════════════════════════════════════════
+// GRID BUILD
+// ══════════════════════════════════════════════════════
+function buildGrid() {
+  const grid = document.getElementById('schedGrid');
+  grid.innerHTML = '';
+
+  // Headers
+  const empty = document.createElement('div');
+  empty.className = 'col-header empty';
+  grid.appendChild(empty);
+  DAYS.forEach(d => {
+    const h = document.createElement('div');
+    h.className = 'col-header day-col-' + d;
+    h.textContent = d;
+    grid.appendChild(h);
+  });
+
+  // Rows
+  BLOCKS.forEach(block => {
+    const lbl = document.createElement('div');
+    lbl.className = 'row-label';
+    lbl.innerHTML = `<span class="block-name">${block.name}</span><span class="block-time">${block.time}</span>`;
+    grid.appendChild(lbl);
+
+    DAYS.forEach(day => {
+      const acts = SCHEDULE[day][block.id] || [];
+      const cell = document.createElement('div');
+      cell.className = 'cell day-col-' + day;
+
+      const countEl = document.createElement('div');
+      countEl.className = 'act-count';
+      // color count label by dominant category
+      const cats = acts.map(a=>a.cat);
+      const domCat = cats[0] || 'study';
+      const catColors = {wellness:'var(--green)',study:'var(--blue)',fitness:'var(--red)',coding:'var(--purple)',school:'var(--accent)'};
+      countEl.style.color = catColors[domCat] || 'var(--muted2)';
+      countEl.textContent = acts.length + (acts.length===1?' activity':' activities');
+      cell.appendChild(countEl);
+
+      acts.forEach((act, i) => {
+        if (i < 2) {
+          const pill = document.createElement('div');
+          pill.className = 'act-pill ' + act.cat;
+          pill.textContent = act.title;
+          pill.addEventListener('click', () => openModal(act, day, block));
+          cell.appendChild(pill);
+        } else if (i === 2) {
+          const more = document.createElement('div');
+          more.className = 'more-label';
+          more.textContent = '+' + (acts.length - 2) + ' more…';
+          cell.appendChild(more);
+        }
+      });
+
+      grid.appendChild(cell);
+    });
+  });
+  applyDayFilter();
+}
+
+function buildDayFilters() {
+  const wrap = document.getElementById('dayFilters');
+  const allBtn = document.createElement('button');
+  allBtn.className = 'day-btn active';
+  allBtn.textContent = 'All Days';
+  allBtn.addEventListener('click', () => setDay('all', allBtn));
+  wrap.appendChild(allBtn);
+  DAY_FULL.forEach((d,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'day-btn';
+    btn.textContent = d;
+    btn.addEventListener('click', () => setDay(DAYS[i], btn));
+    wrap.appendChild(btn);
+  });
+}
+
+function setDay(day, btn) {
+  activeDay = day;
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyDayFilter();
+}
+
+function applyDayFilter() {
+  DAYS.forEach(d => {
+    const show = activeDay === 'all' || activeDay === d;
+    document.querySelectorAll('.day-col-' + d).forEach(el => {
+      if (show) el.classList.remove('hidden-day');
+      else el.classList.add('hidden-day');
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════
+function openModal(act, day, block) {
+  if (activeTimer) { clearInterval(activeTimer.interval); activeTimer = null; }
+  currentModal = null;
+
+  const catLabel = {wellness:'Wellness',study:'Study / Reading',fitness:'Fitness',coding:'Coding',school:'School'}[act.cat] || act.cat;
+  const catColor = {wellness:'var(--green)',study:'var(--blue)',fitness:'var(--red)',coding:'var(--purple)',school:'var(--accent)'}[act.cat];
+
+  let html = `
+    <div class="modal-cat-label" style="color:${catColor}">${catLabel}</div>
+    <div class="modal-title">${act.title}</div>
+    <div class="modal-meta">${day} &middot; ${block.name} &middot; ${block.time}</div>
+    <div class="modal-desc">${act.desc}</div>
+  `;
+
+  if (act.cat === 'fitness' && act.fitnessKey && ROUTINES[act.fitnessKey]) {
+    currentModal = { routineKey: act.fitnessKey, exIdx: null };
+    html += buildWorkoutHTML(act.fitnessKey);
+  }
+
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  if (act.cat === 'fitness' && act.fitnessKey) attachExListeners(act.fitnessKey);
+}
+
+function buildWorkoutHTML(key) {
+  const r = ROUTINES[key];
+  let exHTML = r.exercises.map((ex, i) => `
+    <div class="ex-item-m" id="exm-${key}-${i}">
+      <div class="ex-dot-m"></div>
+      <div class="ex-info-m">
+        <div class="ex-name-m">${ex.name}</div>
+        <div class="ex-detail-m">${exDetailStr(ex)}</div>
+      </div>
+      <span class="ex-sets-m">${ex.sets} sets</span>
+    </div>`).join('');
+
+  return `
+    <div class="workout-section">
+      <div class="wk-label">${r.title} &mdash; ${r.duration}</div>
+      <div class="ex-list-modal" id="exlist-m-${key}">${exHTML}</div>
+      <div id="timer-m-${key}">
+        <div class="timer-panel" style="text-align:center;padding:1.2rem">
+          <div style="font-size:0.75rem;color:var(--muted);margin-bottom:1rem;font-family:var(--mono)">${r.exercises.length} exercises &middot; runs start to finish automatically</div>
+          <button class="btn btn-start" style="max-width:200px;margin:0 auto;display:block" onclick="startFullWorkout('${key}')">▶ Start Workout</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function attachExListeners(key) {
+  // no-op: exercises are no longer individually tappable
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (activeTimer) { clearInterval(activeTimer.interval); activeTimer = null; }
+  currentModal = null;
+}
+
+function closeModalOnBg(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+// ══════════════════════════════════════════════════════
+// WORKOUT TIMER
+// ══════════════════════════════════════════════════════
+function exDetailStr(ex) {
+  if (ex.workSec) return ex.sets + ' × ' + fmtTime(ex.workSec);
+  if (ex.reps) return ex.sets + ' × ' + ex.reps + ' reps';
+  return ex.sets + ' sets';
+}
+
+function fmtTime(s) {
+  const m = Math.floor(s/60), ss = s%60;
+  return m > 0 ? m+':'+(ss+'').padStart(2,'0') : ss+'s';
+}
+
+function startFullWorkout(key) {
+  if (activeTimer) { clearInterval(activeTimer.interval); activeTimer = null; }
+  document.querySelectorAll(`#exlist-m-${key} .ex-item-m`).forEach(el => el.classList.remove('active-ex'));
+  const first = document.getElementById(`exm-${key}-0`);
+  if (first) first.classList.add('active-ex');
+  _beginExercise(key, 0);
+}
+
+function _beginExercise(key, idx) {
+  const r = ROUTINES[key];
+  const ex = r.exercises[idx];
+  const workSec = ex.workSec || 30;
+  if (activeTimer) clearInterval(activeTimer.interval);
+  activeTimer = { key, idx, set:1, phase:'work', remaining:workSec, total:workSec, paused:false, interval:null };
+  activeTimer.interval = setInterval(tickModal, 1000);
+  renderTP(key, idx, 1, 'work', workSec, workSec);
+}
+
+function renderTP(key, idx, set, state, remaining, total) {
+  const r = ROUTINES[key];
+  const ex = r.exercises[idx];
+  const panel = document.getElementById('timer-m-' + key);
+  if (!panel) return;
+
+  const totalSets = ex.sets;
+  const workSec = ex.workSec || 30;
+  const isRepBased = !ex.workSec && ex.reps;
+
+  let phaseLabel='', phaseCls='', ringColor='#c8f060';
+  let dt = remaining, dtotal = total;
+  let subLabel = '';
+
+  if (state==='work') {
+    phaseLabel='Work'; phaseCls='phase-work'; ringColor='#c8f060'; subLabel='set '+set+'/'+totalSets;
+  } else if (state==='rest-set') {
+    phaseLabel='Rest – between sets'; phaseCls='phase-rest-set'; ringColor='#60b4f0'; subLabel='next: set '+set+'/'+totalSets;
+  } else if (state==='rest-ex') {
+    phaseLabel='Rest – exercise done'; phaseCls='phase-rest-ex'; ringColor='#f0a060'; subLabel='3 min recovery';
+  } else if (state==='done') {
+    panel.innerHTML = `<div class="timer-panel done-banner"><div class="done-icon">✓</div><div class="done-title">Done — ${ex.name}</div><div class="done-sub">All ${totalSets} sets complete</div></div>`;
+    return;
+  }
+
+  const C = 2*Math.PI*50;
+  const prog = dtotal>0 ? dt/dtotal : 1;
+  const dashOff = C*(1-prog);
+  const pct = dtotal>0 ? Math.round((1-dt/dtotal)*100) : 0;
+
+  let dotsHTML='';
+  for (let i=1;i<=totalSets;i++) {
+    let cls='set-dot';
+    if (i<set||(i===set&&(state==='rest-set'||state==='rest-ex'))) cls+=' done';
+    else if (i===set&&state==='work') cls+=' current';
+    dotsHTML+=`<div class="${cls}"></div>`;
+  }
+
+  panel.innerHTML = `
+    <div class="timer-panel">
+      <div class="tp-exname">${r.title}</div>
+      <div class="tp-extitle">${ex.name}</div>
+      <div class="tp-phase ${phaseCls}">${phaseLabel.toUpperCase()}</div>
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 110 110">
+          <circle class="ring-track" cx="55" cy="55" r="50"/>
+          <circle class="ring-prog" cx="55" cy="55" r="50" stroke="${ringColor}" stroke-dasharray="${C}" stroke-dashoffset="${dashOff}"/>
+          <text class="ring-time" x="55" y="52" fill="#f0ede8">${isRepBased?'—':fmtTime(dt)}</text>
+          <text class="ring-sub" x="55" y="70">${subLabel}</text>
+        </svg>
+      </div>
+      <div class="set-dots">${dotsHTML}</div>
+      ${!isRepBased?`<div class="prog-row"><div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:${pct}%;background:${ringColor}"></div></div><span style="font-size:0.62rem;color:var(--muted);min-width:28px;text-align:right;font-family:var(--mono)">${pct}%</span></div>`:''}
+      <div class="timer-controls">
+        ${state==='work'||state==='rest-set'||state==='rest-ex'?`
+          <button class="btn btn-pause" id="pausebtn-m-${key}" onclick="togglePauseModal('${key}')">⏸ Pause</button>
+          <button class="btn btn-skip" onclick="skipPhaseModal('${key}')">Skip ›</button>
+          <button class="btn btn-reset" onclick="startFullWorkout('${key}')">↺ Restart</button>
+        `:''}
+      </div>
+    </div>`;
+}
+
+function tickModal() {
+  if (!activeTimer || activeTimer.paused) return;
+  const {key, idx} = activeTimer;
+  const r = ROUTINES[key];
+  const ex = r.exercises[idx];
+  const workSec = ex.workSec||30;
+  const setRestSec = r.setRestSec||30;
+  const exRestSec = r.exRestSec;
+  const totalSets = ex.sets;
+
+  activeTimer.remaining--;
+
+  if (activeTimer.remaining > 0) {
+    renderTP(key, idx, activeTimer.set, activeTimer.phase, activeTimer.remaining, activeTimer.total);
+    return;
+  }
+
+  if (activeTimer.phase==='work') {
+    if (activeTimer.set < totalSets) {
+      activeTimer.set++; activeTimer.phase='rest-set';
+      activeTimer.remaining=setRestSec; activeTimer.total=setRestSec;
+      renderTP(key, idx, activeTimer.set, 'rest-set', setRestSec, setRestSec);
+      vibe([100]);
+    } else {
+      activeTimer.phase='rest-ex'; activeTimer.remaining=exRestSec; activeTimer.total=exRestSec;
+      renderTP(key, idx, activeTimer.set, 'rest-ex', exRestSec, exRestSec);
+      vibe([200,100,200]);
+    }
+  } else if (activeTimer.phase==='rest-set') {
+    activeTimer.phase='work'; activeTimer.remaining=workSec; activeTimer.total=workSec;
+    renderTP(key, idx, activeTimer.set, 'work', workSec, workSec);
+    vibe([100]);
+  } else if (activeTimer.phase==='rest-ex') {
+    clearInterval(activeTimer.interval); activeTimer=null;
+    // mark current done
+    const doneDot = document.getElementById(`exm-${key}-${idx}`);
+    if (doneDot) { doneDot.classList.remove('active-ex'); doneDot.querySelector('.ex-dot-m').style.background='var(--lime)'; }
+    if (idx+1 < r.exercises.length) {
+      // highlight next
+      const nextEl = document.getElementById(`exm-${key}-${(idx+1)}`);
+      if (nextEl) nextEl.classList.add('active-ex');
+      setTimeout(()=>_beginExercise(key, idx+1), 800);
+    } else {
+      // entire workout done
+      const panel = document.getElementById('timer-m-' + key);
+      if (panel) panel.innerHTML = `<div class="timer-panel done-banner"><div class="done-icon">🏁</div><div class="done-title">Workout Complete!</div><div class="done-sub">${r.title} — all ${r.exercises.length} exercises done</div><button class="btn btn-start" style="margin-top:1rem" onclick="startFullWorkout('${key}')">▶ Go Again</button></div>`;
+      vibe([300,150,300,150,500]);
+    }
+  }
+}
+
+function togglePauseModal(key) {
+  if (!activeTimer) return;
+  activeTimer.paused = !activeTimer.paused;
+  const btn = document.getElementById('pausebtn-m-'+key);
+  if (btn) btn.textContent = activeTimer.paused?'▶ Resume':'⏸ Pause';
+}
+
+function skipPhaseModal(key) {
+  if (!activeTimer) return;
+  activeTimer.remaining=1; tickModal();
+}
+
+function vibe(p) { try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+buildDayFilters();
+buildGrid();
+</script>
+</body>
+</html>
